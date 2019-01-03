@@ -24,7 +24,7 @@ reasonnably recent firmware.
 - [A JailBroken Device](https://wiki.mobileread.com/wiki/5_x_Jailbreak)
 - [Mobileread Kindlet Kit installed](http://www.mobileread.com/forums/showthread.php?t=233932) (should be bundled with most recent JBs)
 - [KUAL installed](http://www.mobileread.com/forums/showthread.php?t=203326)
-- [Python installed](http://www.mobileread.com/forums/showthread.php?t=225030) (a recent enough version, >= 0.15.N-r15585)
+- [Python installed](http://www.mobileread.com/forums/showthread.php?t=225030) (a recent enough version, >= 0.15.N-r15700)
 
 For instructions on how to do that, try the dedicated
 [MobileRead forum](http://www.mobileread.com/forums/forumdisplay.php?f=150) in

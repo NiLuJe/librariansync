@@ -10,10 +10,7 @@ LIBRARIAN_SYNC = "LibrarianSync"
 # Setup FBInk to our liking...
 FBINK_CFG = ffi.new("FBInkConfig *")
 FBINK_CFG.is_quiet = True
-FBINK_CFG.is_padded = True
-FBINK_CFG.is_centered = True
-# FIXME: Switch from padded + centered to rpadded when that hits a snapshot...
-#FBINK_CFG.is_rpadded = True
+FBINK_CFG.is_rpadded = True
 FBINK_CFG.row = -6
 
 # And initialize it
