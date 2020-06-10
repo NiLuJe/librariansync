@@ -1,5 +1,8 @@
+from __future__ import absolute_import
+
 import sys
 import syslog
+import six
 # Requires a Python snapshot circa 0.15.N-r15585
 from _fbink import ffi, lib as fbink
 
@@ -20,7 +23,7 @@ fbink.fbink_init(fbink.FBFD_AUTO, FBINK_CFG)
 # Pilfered from KindleUnpack, with minor tweaks ;).
 # force string to be utf-8 encoded whether unicode or bytestring
 def utf8_str(p, enc=sys.getfilesystemencoding()):
-    if isinstance(p, unicode):
+    if isinstance(p, six.text_type):
         return p.encode('utf-8')
     if enc != 'utf-8':
         return p.decode(enc).encode('utf-8', 'replace')

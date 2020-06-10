@@ -8,12 +8,14 @@
 # port = 13698
 #
 
+from __future__ import absolute_import
+
 import requests
 import os
 import time
 import sys
 import sqlite3
-import ConfigParser
+import six.moves.configparser
 from kindle_logging import log, LIBRARIAN_SYNC
 from generate_collections import update_cc_db, KINDLE_DB_PATH
 
@@ -95,7 +97,7 @@ if __name__ == "__main__":
     start = time.time()
     log(LIBRARIAN_SYNC, "download", "Starting...")
     try:
-        config = ConfigParser.ConfigParser()
+        config = six.moves.configparser.ConfigParser()
         config.read("librarian_download.ini")
         IPs = config.get("server", "IP", "localhost").split("|")
         port = config.get("server", "port", 13699)
