@@ -76,11 +76,11 @@ def parse_entries(cursor, ignore_empty_collections=False):
 
 # -------- JSON collections
 def parse_config(config_file):
-    return json.load(open(config_file, 'r'), 'utf8')
+    return json.load(open(config_file, 'r'))
 
 
 def parse_calibre_plugin_config(config_file):
-    calibre_plugin_config = json.load(open(config_file, 'r'), 'utf8')
+    calibre_plugin_config = json.load(open(config_file, 'r'))
     # handle the locale properly (RegEx borrowed from the KCP)
     coll_name_pattern = re.compile(r'^(.*)@[^@]+$')
     # collection_label: [ebook_uuid, ...]
