@@ -8,7 +8,7 @@ from _fbink import ffi, lib as fbink
 
 # ------- Logging & user feedback (from the K5 Fonts Hack)
 
-LIBRARIAN_SYNC = u"LibrarianSync"
+LIBRARIAN_SYNC = "LibrarianSync"
 
 # Setup FBInk to our liking...
 FBINK_CFG = ffi.new("FBInkConfig *")
@@ -47,15 +47,15 @@ else:
     def bstr(s):
         return str(s)
 
-def log(program, function, msg, level=u"I", display=True):
+def log(program, function, msg, level="I", display=True):
     global LAST_SHOWN
     # open syslog
-    syslog.openlog(u"system: %s %s:%s:" % (level, program, function))
+    syslog.openlog("system: %s %s:%s:" % (level, program, function))
     # set priority
     priority = syslog.LOG_INFO
-    if level == u"E":
+    if level == "E":
         priority = syslog.LOG_ERR
-    elif level == u"W":
+    elif level == "W":
         priority = syslog.LOG_WARNING
     priority |= syslog.LOG_LOCAL4
     # write to syslog
@@ -66,12 +66,12 @@ def log(program, function, msg, level=u"I", display=True):
 
     if display:
         # NOTE: FBInk takes a char*, that's explicitly bytes in Python 3!
-        program_display = u" %s: " % program
-        tag = u""
+        program_display = " %s: " % program
+        tag = ""
         # If loglevel is anything else than I, add it to our tag
-        if level != u"I":
-            tag += u"[%s] " % level
+        if level != "I":
+            tag += "[%s] " % level
         message = unicode_str(msg)
         # print using FBInk (via cFFI)
-        msg_as_bytes = bstr(u"{}\n{} {}".format(program_display, tag, message))
+        msg_as_bytes = bstr("{}\n{} {}".format(program_display, tag, message))
         fbink.fbink_print(fbink.FBFD_AUTO, msg_as_bytes, FBINK_CFG)

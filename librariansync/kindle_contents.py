@@ -112,10 +112,10 @@ class Collection(object):
                     # Proper or fake ASIN set, build the hash
                     hashes_list.append('#{}^{}'.format(e.cdekey, e.cdetype))
             else:
-                log(LIBRARIAN_SYNC, u"legacy hash building",
-                    u"Book %s has no cdeKey?! Skipping it."
-                    u"(sideloaded book?)" % e.location,
-                    u"W", display=False)
+                log(LIBRARIAN_SYNC, "legacy hash building",
+                    "Book %s has no cdeKey?! Skipping it."
+                    "(sideloaded book?)" % e.location,
+                    "W", display=False)
         return hashes_list
 
     def to_calibre_plugin_json(self):
