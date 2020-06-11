@@ -23,6 +23,8 @@ fbink.fbink_init(fbink.FBFD_AUTO, FBINK_CFG)
 # Pilfered from KindleUnpack, with minor tweaks ;).
 # force string to be utf-8 encoded whether unicode or bytestring
 def utf8_str(p, enc=sys.getfilesystemencoding()):
+    if p is None:
+        return None
     if isinstance(p, six.text_type):
         return p.encode('utf-8')
     if enc != 'utf-8':
@@ -65,7 +67,7 @@ def log(program, function, msg, level="I", display=True):
     #
 
     if display:
-        # NOTE: FBInk takes a char*, that's explicitly bytes in Python 3!
+        # NOTE: FBInk takes a const char*, that's explicitly bytes in Python 3!
         program_display = " %s: " % program
         tag = ""
         # If loglevel is anything else than I, add it to our tag
