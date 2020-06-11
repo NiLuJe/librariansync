@@ -4,29 +4,30 @@ import os
 import re
 import locale
 import time
+import six
 
 from kindle_logging import log, LIBRARIAN_SYNC
 
-KINDLE_EBOOKS_ROOT = "/mnt/us/documents/"
+KINDLE_EBOOKS_ROOT = u"/mnt/us/documents/"
 
-SUPPORTED_EXTENSIONS = [".azw",
-                        ".mobi",
-                        ".prc",
-                        ".pobi",
-                        ".azw3",
-                        ".azw6",
-                        ".yj",
-                        ".azw1",
-                        ".tpz",
-                        ".pdf",
-                        ".txt",
-                        ".html",
-                        ".htm",
-                        ".jpg",
-                        ".jpeg",
-                        ".azw2",
-                        ".kfx",
-                        ".epub"]
+SUPPORTED_EXTENSIONS = [u".azw",
+                        u".mobi",
+                        u".prc",
+                        u".pobi",
+                        u".azw3",
+                        u".azw6",
+                        u".yj",
+                        u".azw1",
+                        u".tpz",
+                        u".pdf",
+                        u".txt",
+                        u".html",
+                        u".htm",
+                        u".jpg",
+                        u".jpeg",
+                        u".azw2",
+                        u".kfx",
+                        u".epub"]
 
 
 # -------- Folders
@@ -43,7 +44,7 @@ def list_folder_contents():
 
 
 def get_relative_path(path):
-    if isinstance(path, str):
+    if isinstance(path, six.binary_type):
         return path.split(KINDLE_EBOOKS_ROOT)[1].decode("utf8")
     else:
         return path.split(KINDLE_EBOOKS_ROOT)[1]
@@ -111,10 +112,10 @@ class Collection(object):
                     # Proper or fake ASIN set, build the hash
                     hashes_list.append('#{}^{}'.format(e.cdekey, e.cdetype))
             else:
-                log(LIBRARIAN_SYNC, "legacy hash building",
-                    "Book %s has no cdeKey?! Skipping it."
-                    "(sideloaded book?)" % e.location,
-                    "W", display=False)
+                log(LIBRARIAN_SYNC, u"legacy hash building",
+                    u"Book %s has no cdeKey?! Skipping it."
+                    u"(sideloaded book?)" % e.location,
+                    u"W", display=False)
         return hashes_list
 
     def to_calibre_plugin_json(self):

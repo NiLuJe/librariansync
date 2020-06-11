@@ -8,7 +8,7 @@ from _fbink import ffi, lib as fbink
 
 # ------- Logging & user feedback (from the K5 Fonts Hack)
 
-LIBRARIAN_SYNC = "LibrarianSync"
+LIBRARIAN_SYNC = u"LibrarianSync"
 
 # Setup FBInk to our liking...
 FBINK_CFG = ffi.new("FBInkConfig *")
@@ -29,16 +29,33 @@ def utf8_str(p, enc=sys.getfilesystemencoding()):
         return p.decode(enc).encode('utf-8', 'replace')
     return p
 
+# convert string to be unicode encoded
+def unicode_str(p, enc=sys.getfilesystemencoding()):
+    if p is None:
+        return None
+    if isinstance(p, six.text_type):
+        return p
+    return p.decode(enc)
 
-def log(program, function, msg, level="I", display=True):
+if six.PY3:
+    def bstr(s):
+        if isinstance(s, str):
+            return bytes(s, 'latin-1')
+        else:
+            return bytes(s)
+else:
+    def bstr(s):
+        return str(s)
+
+def log(program, function, msg, level=u"I", display=True):
     global LAST_SHOWN
     # open syslog
-    syslog.openlog("system: %s %s:%s:" % (level, program, function))
+    syslog.openlog(u"system: %s %s:%s:" % (level, program, function))
     # set priority
     priority = syslog.LOG_INFO
-    if level == "E":
+    if level == u"E":
         priority = syslog.LOG_ERR
-    elif level == "W":
+    elif level == u"W":
         priority = syslog.LOG_WARNING
     priority |= syslog.LOG_LOCAL4
     # write to syslog
@@ -48,11 +65,13 @@ def log(program, function, msg, level="I", display=True):
     #
 
     if display:
-        program_display = " %s: " % program
-        displayed = " "
+        # NOTE: FBInk takes a char*, that's explicitly bytes in Python 3!
+        program_display = u" %s: " % program
+        tag = u""
         # If loglevel is anything else than I, add it to our tag
-        if level != "I":
-            displayed += "[%s] " % level
-        displayed += utf8_str(msg)
+        if level != u"I":
+            tag += u"[%s] " % level
+        message = unicode_str(msg)
         # print using FBInk (via cFFI)
-        fbink.fbink_print(fbink.FBFD_AUTO, "%s\n%s" % (program_display, displayed), FBINK_CFG)
+        msg_as_bytes = bstr(u"{}\n{} {}".format(program_display, tag, message))
+        fbink.fbink_print(fbink.FBFD_AUTO, msg_as_bytes, FBINK_CFG)

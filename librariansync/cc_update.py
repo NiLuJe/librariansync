@@ -11,7 +11,7 @@ from kindle_logging import log, LIBRARIAN_SYNC
 def is_cc_aware():
     # Check if the device is CloudCollections aware in order to know
     # which fields to pass...
-    with open('/etc/prettyversion.txt', 'r') as f:
+    with open(u"/etc/prettyversion.txt", "r") as f:
         prettyversion = f.read()
 
     # We just want the human readable version string, not the crap around it
@@ -98,9 +98,9 @@ class CCUpdate(object):
 
     def execute(self):
         if not self.commands:
-            log(LIBRARIAN_SYNC, "cc_update", "Nothing to update.")
+            log(LIBRARIAN_SYNC, u"cc_update", u"Nothing to update.")
         else:
-            log(LIBRARIAN_SYNC, "cc_update", "Sending commands...")
+            log(LIBRARIAN_SYNC, u"cc_update", u"Sending commands...")
             full_command = {"commands": self.commands,
                             "type": "ChangeRequest", "id": 1}
             # When WiFi's enabled, we inherit the WhisperSync proxy, which we *cannot* go through,
@@ -113,6 +113,6 @@ class CCUpdate(object):
                               headers={'content-type': 'application/json'},
                               proxies={'no': 'pass'})
             if r.status_code == requests.codes.ok:
-                log(LIBRARIAN_SYNC, "cc_update", "Success.")
+                log(LIBRARIAN_SYNC, u"cc_update", u"Success.")
             else:
-                log(LIBRARIAN_SYNC, "cc_update", "Oh, no. It failed.", "E")
+                log(LIBRARIAN_SYNC, u"cc_update", u"Oh, no. It failed.", u"E")

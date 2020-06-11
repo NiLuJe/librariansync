@@ -21,18 +21,18 @@ from kindle_contents import find_collection, find_ebook, list_folder_contents
 from kindle_logging import log, LIBRARIAN_SYNC
 
 # -------- Config
-KINDLE_DB_PATH = "/var/local/cc.db"
-TAGS = "../collections.json"
-CALIBRE_PLUGIN_FILE = "/mnt/us/system/collections.json"
-EXPORT = "../exported_collections.json"
-KINDLE_EBOOKS_ROOT = "/mnt/us/documents/"
+KINDLE_DB_PATH = u"/var/local/cc.db"
+TAGS = u"../collections.json"
+CALIBRE_PLUGIN_FILE = u"/mnt/us/system/collections.json"
+EXPORT = u"../exported_collections.json"
+KINDLE_EBOOKS_ROOT = u"/mnt/us/documents/"
 
-SELECT_COLLECTION_ENTRIES = 'select p_uuid, p_titles_0_nominal '\
-                            'from Entries where p_type = "Collection"'
-SELECT_EBOOK_ENTRIES = 'select p_uuid, p_location, p_cdeKey, p_cdeType '\
-                       'from Entries where p_type = "Entry:Item"'
-SELECT_EXISTING_COLLECTIONS = 'select i_collection_uuid, i_member_uuid '\
-                              'from Collections'
+SELECT_COLLECTION_ENTRIES = u'select p_uuid, p_titles_0_nominal '\
+                            u'from Entries where p_type = "Collection"'
+SELECT_EBOOK_ENTRIES = u'select p_uuid, p_location, p_cdeKey, p_cdeType '\
+                       u'from Entries where p_type = "Entry:Item"'
+SELECT_EXISTING_COLLECTIONS = u'select i_collection_uuid, i_member_uuid '\
+                              u'from Collections'
 
 
 # -------- Existing Kindle database entries
@@ -61,10 +61,10 @@ def parse_entries(cursor, ignore_empty_collections=False):
                 db_ebooks[ebook_idx].add_collection(
                     db_collections[collection_idx], True)
         else:
-            log(LIBRARIAN_SYNC, "parse_entries",
-                "Skipping collection {} (collection_idx: {}, ebook_uuid: {})"
+            log(LIBRARIAN_SYNC, u"parse_entries",
+                u"Skipping collection {} (collection_idx: {}, ebook_uuid: {})"
                 .format(collection_uuid, collection_idx, ebook_uuid),
-                "W", display=False)
+                u"W", display=False)
 
     # remove empty collections:
     if ignore_empty_collections:
@@ -104,9 +104,9 @@ def update_lists_from_librarian_json(db_ebooks, db_collections,
             ebook_idx_list = find_ebook(db_ebooks, os.path.join(
                 KINDLE_EBOOKS_ROOT, ebook_location))
         if ebook_idx_list == []:
-            log(LIBRARIAN_SYNC, "update librarian",
-                "Invalid location: %s" % ebook_location.encode("utf8"),
-                "W", display=False)
+            log(LIBRARIAN_SYNC, u"update librarian",
+                u"Invalid location: %s" % ebook_location.encode("utf8"),
+                u"W", display=False)
             continue  # invalid
         for collection_label in ebook_collection_labels_list:
             # find collection by label
@@ -161,10 +161,10 @@ def update_lists_from_calibre_plugin_json(db_ebooks, db_collections,
             # find ebook by cdeKey
             ebook_idx_list = find_ebook(db_ebooks, cdekey)
             if ebook_idx_list == []:
-                log(LIBRARIAN_SYNC, "update calibre",
-                    "Couldn't match a db uuid to cdeKey %s"
-                    "(book not on device?)" % cdekey,
-                    "W", display=False)
+                log(LIBRARIAN_SYNC, u"update calibre",
+                    u"Couldn't match a db uuid to cdeKey %s"
+                    u"(book not on device?)" % cdekey,
+                    u"W", display=False)
                 continue  # invalid
             for ebook_idx in ebook_idx_list:
                 # update ebook
@@ -299,46 +299,46 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     start = time.time()
-    log(LIBRARIAN_SYNC, "main", "Starting...")
+    log(LIBRARIAN_SYNC, u"main", u"Starting...")
     try:
         with sqlite3.connect(KINDLE_DB_PATH) as cc_db:
             c = cc_db.cursor()
             if args.rebuild:
-                log(LIBRARIAN_SYNC, "rebuild",
-                    "Rebuilding collections (librarian)...")
+                log(LIBRARIAN_SYNC, u"rebuild",
+                    u"Rebuilding collections (librarian)...")
                 update_cc_db(c, complete_rebuild=True,
                              source="librarian")
             elif args.update:
-                log(LIBRARIAN_SYNC, "update",
-                    "Updating collections (librarian)...")
+                log(LIBRARIAN_SYNC, u"update",
+                    u"Updating collections (librarian)...")
                 update_cc_db(c, complete_rebuild=False,
                              source="librarian")
             elif args.folders:
-                log(LIBRARIAN_SYNC, "rebuild_from_folders",
-                    "Rebuilding collections (folders)...")
+                log(LIBRARIAN_SYNC, u"rebuild_from_folders",
+                    u"Rebuilding collections (folders)...")
                 update_cc_db(c, complete_rebuild=True,
                              source="folders")
             elif args.rebuild_calibre:
-                log(LIBRARIAN_SYNC, "rebuild_from_calibre_plugin_json",
-                    "Rebuilding collections (Calibre)...")
+                log(LIBRARIAN_SYNC, u"rebuild_from_calibre_plugin_json",
+                    u"Rebuilding collections (Calibre)...")
                 update_cc_db(c, complete_rebuild=True,
                              source="calibre_plugin")
             elif args.update_calibre:
-                log(LIBRARIAN_SYNC, "update_from_calibre_plugin_json",
-                    "Updating collections (Calibre)...")
+                log(LIBRARIAN_SYNC, u"update_from_calibre_plugin_json",
+                    u"Updating collections (Calibre)...")
                 update_cc_db(c, complete_rebuild=False,
                              source="calibre_plugin")
             elif args.export:
-                log(LIBRARIAN_SYNC, "export", "Exporting collections...")
+                log(LIBRARIAN_SYNC, u"export", u"Exporting collections...")
                 export_existing_collections(c)
             elif args.delete:
-                log(LIBRARIAN_SYNC, "delete", "Deleting all collections...")
+                log(LIBRARIAN_SYNC, u"delete", u"Deleting all collections...")
                 delete_all_collections(c)
     except:
-        log(LIBRARIAN_SYNC, "main", "Something went very wrong.", "E")
+        log(LIBRARIAN_SYNC, u"main", u"Something went very wrong.", u"E")
         traceback.print_exc()
     else:
-        log(LIBRARIAN_SYNC, "main", "Done in %.02fs." % (time.time()-start))
+        log(LIBRARIAN_SYNC, u"main", u"Done in %.02fs." % (time.time()-start))
         # Take care of buffered IO & KUAL's IO redirection...
         sys.stdout.flush()
         sys.stderr.flush()
