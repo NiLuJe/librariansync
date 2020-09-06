@@ -42,7 +42,7 @@ def unicode_str(p, enc=sys.getfilesystemencoding()):
 if six.PY3:
     def bstr(s):
         if isinstance(s, str):
-            return bytes(s, 'latin-1')
+            return bytes(s, 'utf-8')
         else:
             return bytes(s)
 else:
