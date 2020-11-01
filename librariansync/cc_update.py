@@ -23,11 +23,18 @@ def is_cc_aware():
     else:
         return False
 
+def get_session_token():
+    try:
+        with open("/tmp/session_token", "r") as f:
+            return f.read()
+    except:
+        return ""
 
 class CCUpdate(object):
     def __init__(self):
         self.commands = []
         self.is_cc_aware = is_cc_aware()
+        self.session_token = get_session_token()
 
     def delete_collection(self, coll_uuid):
         self.commands.append(
@@ -108,7 +115,7 @@ class CCUpdate(object):
             os.environ['no_proxy'] = '127.0.0.1,localhost'
             r = requests.post("http://127.0.0.1:9101/change",
                               data=json.dumps(full_command),
-                              headers={'content-type': 'application/json'},
+                              headers={'AuthToken': self.session_token, 'content-type': 'application/json'},
                               proxies={'no': 'pass'})
             if r.status_code == requests.codes.ok:
                 log(LIBRARIAN_SYNC, "cc_update", "Success.")
